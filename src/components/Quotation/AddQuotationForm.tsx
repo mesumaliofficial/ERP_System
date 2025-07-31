@@ -5,7 +5,7 @@ import { Quotation } from './useQuotation';
 function AddQuotationForm() {
   const {
     quotationHeading, setQuotationHeading,
-    setQuotationNumber,
+    quotationNumber, setQuotationNumber,
     issueDate, setIssueDate,
     validTill, setValidTill,
     clientName, setClientName,
@@ -19,11 +19,8 @@ function AddQuotationForm() {
     taxPercentage, setTaxPercentage,
     loading,
     showSuccess, setShowSuccess,
-    quotations,
     handleAddItem, handleRemoveItem, handleItemChange, handleSubmit
   } = Quotation();
-
-  const totalQuotation = quotations?.length ? String(quotations.length + 1).padStart(3, '0') : '001';
 
   return (
     <div className="p-4 md:p-6 bg-white">
@@ -33,7 +30,7 @@ function AddQuotationForm() {
           <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6">Add Quotation</h2>
           <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-6">
             <InputField id="quotationHeading" label="Quotation Heading" placeholder="Enter Quotation Heading" value={quotationHeading} onChange={(e) => setQuotationHeading(e.target.value)} />
-            <InputField id="quotationNumber" label="Quotation Number" placeholder="Enter Quotation Number" value={`QUO-${totalQuotation}`} onChange={(e) => setQuotationNumber(e.target.value)} />
+            <InputField id="quotationNumber" label="Quotation Number" placeholder="Enter Quotation Number" value={quotationNumber} onChange={(e) => setQuotationNumber(e.target.value)} />
             <InputField id="quotationIssueDate" label="Date of Issue" type="date" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />
             <InputField id="quotationValidTill" label="Valid Till" type="date" value={validTill} onChange={(e) => setValidTill(e.target.value)} />
           </div>

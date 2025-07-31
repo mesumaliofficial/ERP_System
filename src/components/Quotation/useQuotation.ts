@@ -5,7 +5,7 @@ import { QuotationTypes, Item } from "@/types/quotationTypes";
 export const Quotation = () => {
   // ===== Static Quotation Info =====
   const [quotationHeading, setQuotationHeading] = useState("");
-  const [quotationNumber, setQuotationNumber] = useState("");
+  const [quotationNumber, setQuotationNumber] = useState("QUO-001");
   const [issueDate, setIssueDate] = useState("");
   const [validTill, setValidTill] = useState("");
 
@@ -31,10 +31,6 @@ export const Quotation = () => {
 
   // ===== Existing Quotations State =====
   const [quotations, setQuotations] = useState<QuotationTypes[] | null>([]);
-
-  // ===== Edit Quotation State =====
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableData, setEditableData] = useState<QuotationTypes | null>(null);
 
   // ===== Items State =====
   const [items, setItems] = useState<Item[]>([
@@ -213,6 +209,8 @@ export const Quotation = () => {
       const result = await res.json();
       if (result.success) {
         fetchQuotations();
+        setShowSuccess(true)
+        setMessage("Quotation has been delete successfully.");
       } else {
         alert("Failed to delete Quotation");
       }
@@ -252,6 +250,70 @@ export const Quotation = () => {
   useEffect(() => {
     fetchQuotations();
   }, []);
+
+  // ===== Get Quotation Number =====
+  useEffect(() => {
+    if (quotations && quotationNumber === "") {
+      const totalQuotation = String(quotations.length + 1).padStart(3, '0');
+      setQuotationNumber(`QUO-${totalQuotation}`);
+    }
+  }, [quotations]);
+
+  // =====  Quotation Form Update =====
+
+  const handleUpdate = async (id: string) => {
+    setLoading(true);
+    const payload: QuotationTypes = {
+      _id: id,
+      quotationHeading,
+      quotationNumber,
+      issueDate,
+      validTill,
+      client: {
+        name: clientName,
+        company: clientCompany,
+        contact: clientContact,
+        email: clientEmail,
+      },
+      items: items.map((item) => ({
+        _key: item.productId,
+        itemName: item.productName,
+        itemRate: Number(item.ProductRate),
+        itemQty: Number(item.ProductQty),
+        itemAmount: Number(item.ProductAmount),
+      })),
+      quotationConditions,
+      tax: {
+        isApplied: isTaxApplied,
+        percentage: taxPercentage,
+      },
+      totals: {
+        subTotal,
+        grandTotal,
+      },
+    };
+
+    try {
+      const res = await fetch("/api/quotation", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        resetForm();
+        fetchQuotations();
+        setShowSuccess(true);
+        setMessage("Quotation has been update successfully");
+      }
+    } catch (err) {
+      console.error("Failed to update quotation:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
   // ===== Return All States and Handlers to Component =====
   return {
@@ -296,10 +358,7 @@ export const Quotation = () => {
     selectedId,
     setSelectedId,
     setItems,
-    editableData,
-    setIsEditing,
-    setEditableData,
-    isEditing,
-    message
+    message,
+    handleUpdate,
   };
 };

@@ -5,16 +5,18 @@ import { MdDownload } from "react-icons/md";
 import { Quotation } from "./useQuotation";
 import DeleteDialog from "../common/ui/DeleteDialog";
 import Loader from "../common/ui/Loader";
+import { useQuotationContext } from './QuotationContext'
+import { QuotationTypes } from "@/types/quotationTypes";
+import SuccessDialog from "../common/ui/SuccessDialog";
 
 function ManageQuotation() {
-  const {
-    quotations,
-    confirmDelete,
-    cancelDelete,
-    deleteRequest,
-    showDialog,
-    loading,
-  } = Quotation();
+  const { quotations, confirmDelete, cancelDelete, deleteRequest, showDialog, loading, showSuccess, setShowSuccess } = Quotation();
+  const { setIsEditing, setEditableQuotation } = useQuotationContext();
+
+  const handleEdit = (item: QuotationTypes) => {
+    setEditableQuotation(item)
+    setIsEditing(true)
+  }
 
   return (
     <div className="p-4 md:p-6 relative">
@@ -52,16 +54,15 @@ function ManageQuotation() {
                   <td className="py-2 pr-4">{item.client?.name}</td>
                   <td className="py-2 pr-4">{new Date(item.issueDate).toLocaleDateString('en-US')}</td>
                   <td className="py-2 pr-4">Rs.{item.totals?.grandTotal}</td>
-                  <td className="py-2 space-x-2 flex items-center">
-                    <button title="Edit">
+                  <td className="py-2 space-x-2 flex items-center cursor-pointer">
+                    <button title="Edit" onClick={() => handleEdit(item)}>
                       <FaEdit className="hover:text-[#1E90FF] cursor-pointer" />
                     </button>
-                    <button
-                      title="Delete"
-                      onClick={() => deleteRequest(item._id)}
-                    >
+
+                    <button title="Delete" onClick={() => deleteRequest(item._id)}>
                       <FaTrash className="hover:text-red-500 cursor-pointer" />
                     </button>
+
                     <button title="Download">
                       <MdDownload className="hover:text-[#1873CF] cursor-pointer" />
                     </button>
@@ -79,6 +80,11 @@ function ManageQuotation() {
             onConfirm={confirmDelete}
             message="Are you sure you want to delete this Quotation?"
           />
+        )}
+
+        {/* Message */}
+        {showSuccess && (
+          <SuccessDialog title="Quotation Delete" message="Quotation has been delete successfully." buttonText="Ok" onClose={() => setShowSuccess(false)} />
         )}
       </div>
     </div>

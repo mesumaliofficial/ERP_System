@@ -91,3 +91,51 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ success: false, message: 'Quotation deletion failed', error }, { status: 500 })
   }
 }
+
+// PUT
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+
+    const {
+      _id,
+      quotationHeading,
+      quotationNumber,
+      issueDate,
+      validTill,
+      client,
+      items,
+      tax,
+      quotationConditions,
+      totals
+    } = body;
+
+    const updatedDoc = {
+      quotationHeading,
+      quotationNumber,
+      issueDate,
+      validTill,
+      client,
+      items,
+      tax,
+      quotationConditions,
+      totals,
+    };
+
+    const result = await sanityClient.patch(_id)
+      .set(updatedDoc)
+      .commit();
+
+    return NextResponse.json({
+      success: true,
+      message: "Quotation updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("PUT Error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to update quotation" },
+      { status: 500 }
+    );
+  }
+}

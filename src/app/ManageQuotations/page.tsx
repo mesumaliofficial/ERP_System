@@ -4,9 +4,12 @@ import { useState } from "react";
 import Navbar from "@/components/common/layouts/Navbar";
 import Sidebar from "@/components/common/layouts/Sidebar";
 import ManageQuotation from "@/components/Quotation/ManageQuotation";
+import { useQuotationContext } from "@/components/Quotation/QuotationContext";
+import EditQuotationForm from "@/components/Quotation/EditQuotationForm";
 
 const ManageQuotations = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { isEditing } = useQuotationContext();
 
   return (
     <>
@@ -32,7 +35,7 @@ const ManageQuotations = () => {
         >
           <div className="bg-white shadow rounded">
             <div className="mt-0 mx-auto">
-                <ManageQuotation />
+                {isEditing ? <EditQuotationForm/> : <ManageQuotation />} 
             </div>
           </div>
         </main>
