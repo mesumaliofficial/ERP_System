@@ -29,6 +29,7 @@ export interface QuotationTypes {
   tax: {
     isApplied: boolean;
     percentage: string;
+    taxAmount: number
   };
   totals: {
     subTotal: number;
@@ -37,3 +38,7 @@ export interface QuotationTypes {
 }
 
 export type QuotationItem = QuotationTypes["items"][number];
+
+export interface QuotationPDFProps {
+  data: QuotationTypes
+}

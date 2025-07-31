@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       totals
     } = body;
 
-
+    const taxAmount = tax.isApplied && tax.percentage ? Number(totals.subTotal) * Number(tax.percentage) / 100 : 0;
 
     const payload = {
       _type: "addQuotation",
@@ -46,6 +46,7 @@ export async function POST(req: Request) {
       tax: {
         isApplied: tax.isApplied,
         percentage: tax.percentage,
+        taxAmount,
       },
       totals: {
         subTotal: totals.subTotal,

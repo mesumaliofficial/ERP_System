@@ -8,9 +8,21 @@ import Loader from "../common/ui/Loader";
 import { useQuotationContext } from './QuotationContext'
 import { QuotationTypes } from "@/types/quotationTypes";
 import SuccessDialog from "../common/ui/SuccessDialog";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import QuotationPDF from "./Pdf/QuotationPDF";
 
 function ManageQuotation() {
-  const { quotations, confirmDelete, cancelDelete, deleteRequest, showDialog, loading, showSuccess, setShowSuccess } = Quotation();
+  const {
+    quotations,
+    confirmDelete,
+    cancelDelete,
+    deleteRequest,
+    showDialog,
+    loading,
+    showSuccess,
+    setShowSuccess
+  } = Quotation();
+
   const { setIsEditing, setEditableQuotation } = useQuotationContext();
 
   const handleEdit = (item: QuotationTypes) => {
@@ -33,6 +45,7 @@ function ManageQuotation() {
             </div>
           </>
         )}
+
         {/* Quotation Table */}
         <div className={`${loading ? "pointer-events-none opacity-70" : ""} overflow-x-auto`}>
           <table className="w-full min-w-[400px]">
@@ -52,20 +65,42 @@ function ManageQuotation() {
                   <td className="py-2 pr-4">{index + 1}</td>
                   <td className="py-2 pr-4">{item.quotationNumber}</td>
                   <td className="py-2 pr-4">{item.client?.name}</td>
-                  <td className="py-2 pr-4">{new Date(item.issueDate).toLocaleDateString('en-US')}</td>
+                  <td className="py-2 pr-4">
+                    {new Date(item.issueDate).toLocaleDateString('en-US')}
+                  </td>
                   <td className="py-2 pr-4">Rs.{item.totals?.grandTotal}</td>
-                  <td className="py-2 space-x-2 flex items-center cursor-pointer">
-                    <button title="Edit" onClick={() => handleEdit(item)}>
-                      <FaEdit className="hover:text-[#1E90FF] cursor-pointer" />
-                    </button>
+                  <td className="py-2 pr-4">
+                    <div className="flex items-center space-x-1">
 
-                    <button title="Delete" onClick={() => deleteRequest(item._id)}>
-                      <FaTrash className="hover:text-red-500 cursor-pointer" />
-                    </button>
+                      {/* Edit Button */}
+                      <button
+                        onClick={() => handleEdit(item)}
+                        title="Edit"
+                        className="p-1 rounded hover:bg-gray-100 transition cursor-pointer"
+                      >
+                        <FaEdit className="text-gray-600 hover:text-black" size={16} />
+                      </button>
 
-                    <button title="Download">
-                      <MdDownload className="hover:text-[#1873CF] cursor-pointer" />
-                    </button>
+                      {/* Delete Button */}
+                      <button
+                        onClick={() => deleteRequest(item._id)}
+                        title="Delete"
+                        className="p-1 rounded hover:bg-gray-100 transition cursor-pointer"
+                      >
+                        <FaTrash className="text-gray-600 hover:text-black" size={16} />
+                      </button>
+
+                      {/* Download Button */}
+                      <PDFDownloadLink document={<QuotationPDF data={item} />} fileName={item.quotationNumber}>
+                        <button
+                          title="Download"
+                          className="p-1 rounded hover:bg-gray-100 transition cursor-pointer"
+                        >
+                          <MdDownload className="text-gray-600 hover:text-black" size={18} />
+                        </button>
+                      </PDFDownloadLink>
+
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -82,9 +117,14 @@ function ManageQuotation() {
           />
         )}
 
-        {/* Message */}
+        {/* Success Message */}
         {showSuccess && (
-          <SuccessDialog title="Quotation Delete" message="Quotation has been delete successfully." buttonText="Ok" onClose={() => setShowSuccess(false)} />
+          <SuccessDialog
+            title="Quotation Deleted"
+            message="Quotation has been deleted successfully."
+            buttonText="Ok"
+            onClose={() => setShowSuccess(false)}
+          />
         )}
       </div>
     </div>

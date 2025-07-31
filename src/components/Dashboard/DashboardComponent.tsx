@@ -1,14 +1,9 @@
 import React from 'react';
 import { FiCheckSquare, FiFileText, FiUsers } from 'react-icons/fi';
-// import { useQuotationLogic } from '../components/Quotation/QuotationLogic';
-// import { useClientLogic } from '@/components/Clients/ClientLogic';
+import { Quotation } from '../Quotation/useQuotation';
 
 function DashboardComponent() {
-  // const { quotations } = useQuotationLogic()
-  // const { clientData } =useClientLogic()
-  // const totalQuotations = quotations.length
-  // const totalClients = clientData.length
-
+  const {quotations} = Quotation();
   return (
     <>
       {/* Cards Grid */}
@@ -20,7 +15,7 @@ function DashboardComponent() {
           </div>
           <div>
             <h4 className="text-sm font-medium text-gray-500">Total Invoices</h4>
-            <p className="text-xl font-semibold text-gray-800">0</p>
+            <p className="text-xl font-semibold text-gray-800">00</p>
           </div>
         </div>
 
@@ -31,7 +26,7 @@ function DashboardComponent() {
           </div>
           <div>
             <h4 className="text-sm font-medium text-gray-500">Quotations</h4>
-            <p className="text-xl font-semibold text-gray-800">00</p>
+            <p className="text-xl font-semibold text-gray-800">{`${quotations?.length ?? 0}`.padStart(2, '0')}</p>
           </div>
         </div>
 

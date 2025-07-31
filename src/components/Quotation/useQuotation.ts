@@ -77,22 +77,21 @@ export const Quotation = () => {
   };
 
   // ===== Calculate Subtotal and Grand Total =====
-  const calculateTotal = (): { subTotal: number; grandTotal: number } => {
+  const calculateTotal = (): { subTotal: number; grandTotal: number, taxAmount: number } => {
     const subTotal = items.reduce(
       (acc, item) => acc + Number(item.ProductAmount || 0),
       0
     );
-    const tax = isTaxApplied && taxPercentage
-      ? (subTotal * Number(taxPercentage)) / 100
-      : 0;
+    const taxAmount = isTaxApplied && taxPercentage ? (subTotal * Number(taxPercentage)) / 100 : 0;
 
     return {
       subTotal,
-      grandTotal: subTotal + tax,
+      taxAmount,
+      grandTotal: subTotal + taxAmount,
     };
   };
 
-  const { subTotal, grandTotal } = calculateTotal();
+  const { subTotal, grandTotal, taxAmount } = calculateTotal();
 
   // ===== Submit Quotation to API =====
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,6 +121,7 @@ export const Quotation = () => {
       tax: {
         isApplied: isTaxApplied,
         percentage: taxPercentage,
+        taxAmount: taxAmount,
       },
       totals: {
         subTotal,
@@ -286,6 +286,7 @@ export const Quotation = () => {
       tax: {
         isApplied: isTaxApplied,
         percentage: taxPercentage,
+        taxAmount: taxAmount,
       },
       totals: {
         subTotal,

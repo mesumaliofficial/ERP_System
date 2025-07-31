@@ -106,9 +106,13 @@ export const AddQuotation = defineType({
           title: "Tax Percentage",
           type: "string",
         }),
+        defineField({
+          name: "taxAmount",
+          title: "Tax Amount",
+          type: "number",
+        }),
       ],
     }),
-
 
     // Terms
     defineField({
@@ -116,7 +120,6 @@ export const AddQuotation = defineType({
       title: "Quotation Conditions",
       type: "text",
     }),
-
 
     // Totals
     defineField({
@@ -136,7 +139,6 @@ export const AddQuotation = defineType({
         })
       ],
     }),
-
 
   ],
 });
