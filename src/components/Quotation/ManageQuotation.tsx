@@ -13,7 +13,7 @@ import QuotationPDF from "./Pdf/QuotationPDF";
 
 function ManageQuotation() {
   const {
-    quotations,
+    sortedQuotations,
     confirmDelete,
     cancelDelete,
     deleteRequest,
@@ -60,7 +60,7 @@ function ManageQuotation() {
               </tr>
             </thead>
             <tbody>
-              {quotations?.map((item, index) => (
+              {sortedQuotations?.map((item, index) => (
                 <tr className="border-b border-gray-300 hover:bg-gray-50 text-[15px]" key={item._id}>
                   <td className="py-2 pr-4">{index + 1}</td>
                   <td className="py-2 pr-4">{item.quotationNumber}</td>

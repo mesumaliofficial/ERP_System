@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   grandValueBox: { fontSize: 11, fontWeight: 700, backgroundColor: '#1E90FF', color: '#fff', paddingVertical: 3, paddingHorizontal: 10, borderRadius: 4 },
   termsSection: { marginTop: 15, width: '70%', paddingHorizontal: 10, borderLeftWidth: 3, borderLeftColor: '#2b6cb0' },
   termsText: { fontSize: 9, color: '#4a5568', lineHeight: 1.6 },
-  footerBottom: { marginTop: 30, width: '100%' },
+  footerBottom: { position: 'absolute', bottom: 30, left: 0, right: 0, width: '100%' },
   footerContact: { textAlign: 'center', fontSize: 8.5, color: '#2b6cb0', backgroundColor: '#edf2f7', padding: 8, borderRadius: 6 },
 });
 

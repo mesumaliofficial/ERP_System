@@ -30,7 +30,7 @@ export const Quotation = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // ===== Existing Quotations State =====
-  const [quotations, setQuotations] = useState<QuotationTypes[] | null>([]);
+  const [quotations, setQuotations] = useState<QuotationTypes[]>([]);
 
   // ===== Items State =====
   const [items, setItems] = useState<Item[]>([
@@ -253,11 +253,12 @@ export const Quotation = () => {
 
   // ===== Get Quotation Number =====
   useEffect(() => {
-    if (quotations && quotationNumber === "") {
-      const totalQuotation = String(quotations.length + 1).padStart(3, '0');
-      setQuotationNumber(`QUO-${totalQuotation}`);
-    }
-  }, [quotations]);
+  if (quotations && quotations.length >= 0) {
+    const totalQuotation = String(quotations.length + 1).padStart(3, '0');
+    setQuotationNumber(`QUO-${totalQuotation}`);
+  }
+}, [quotations]);
+
 
   // =====  Quotation Form Update =====
 
@@ -315,9 +316,17 @@ export const Quotation = () => {
     }
   }
 
+  // ===== Sorting Quotation=====
+    const sortedQuotations = [...(quotations || [])].sort((a, b) => {
+    const numA = parseInt(a.quotationNumber.replace(/[^\d]/g, ""), 10);
+    const numB = parseInt(b.quotationNumber.replace(/[^\d]/g, ""), 10);
+    return numB - numA
+  })
+
 
   // ===== Return All States and Handlers to Component =====
   return {
+    sortedQuotations,
     quotationHeading,
     setQuotationHeading,
     quotationNumber,
